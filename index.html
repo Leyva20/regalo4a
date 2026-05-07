@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestra Historia</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@700&display=swap');
+
+        :root {
+            --fondo: #05160a;
+            --ancho: 400px;
+            --largo: 550px;
+        }
+
+        body {
+            background-color: var(--fondo);
+            background-image: radial-gradient(circle, #1b4332 0%, #05160a 100%);
+            margin: 0; height: 100vh; display: flex;
+            justify-content: center; align-items: center;
+            overflow: hidden; perspective: 2000px;
+        }
+
+        .book {
+            position: relative;
+            width: var(--ancho); height: var(--largo);
+            transform-style: preserve-3d;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.9);
+        }
+
+        .paper {
+            position: absolute; width: 100%; height: 100%;
+            transform-origin: left;
+            transition: transform 1.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+            transform-style: preserve-3d;
+        }
+
+        .paper.flipped { transform: rotateY(-180deg); }
+
+        .front, .back {
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden; padding: 25px;
+            box-sizing: border-box; 
+            
+            /* --- TU ESTILO DE PAPEL DESDE LA LAPTOP --- */
+            background-image: url('papelconflores.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            border: 1px solid #c2b280;
+            border-left: 5px solid #5d4037;
+            border-radius: 0 15px 15px 0;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.2);
+            
+            display: flex; flex-direction: column; align-items: center; 
+            justify-content: center; text-align: center;
+            overflow: hidden;
+        }
+
+        .back { transform: rotateY(180deg); border-radius: 15px 0 0 15px; }
+
+        /* --- CONFIGURACIÓN DE DECORACIONES --- */
+        .decor {
+            position: absolute;
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0.85;
+        }
+        .decor2 {
+            position: absolute;
+            pointer-events: none;
+            z-index: 200;
+            opacity: 0.85;
+        }
+        
+        /* Posiciones variadas */
+        .decor-top-right { top: -10px; right: -10px; width: 160px; }
+        .decor-med-right { top: 100px; right: 200px; width: 200px; }
+        .decor-top-left { top: -30px; left: -30px; width: 300px; }
+        .decor-med-left { top: 1px; left: 100px; width: 200px; }
+        .decor-bottom-right { bottom: 10px; right: 10px; width: 160px; }
+        .decor-bottom-right-2 { bottom: -60px; right: -10px; width: 550px; }
+        .decor-bottom-left { bottom: 10px; left: 10px; width: 140px; }
+        .decor-bottom-left-2 { bottom: -10px; left: -30px; width: 500px; }
+        .decor-bottom-left-3 { bottom: -60px; left: -6px; width: 550px; }
+        .decor-bottom-left-4 { bottom: -10px; left: 100px; width: 300px; }
+        .decor-corner { bottom: -10px; right: -10px; width: 130px; }
+        .decor-side { top: 20%; left: -10px; width: 80px; }
+        
+        .decor2-top-right { top: -10px; right: -10px; width: 160px; }
+        .decor2-med-right { top: 100px; right: 200px; width: 200px; }
+        .decor2-top-left { top: -30px; left: -30px; width: 300px; }
+        .decor2-med-left { top: 1px; left: 100px; width: 200px; }
+        .decor2-bottom-right { bottom: 10px; right: 10px; width: 160px; }
+        .decor2-bottom-right-2 { bottom: -60px; right: -10px; width: 550px; }
+        .decor2-bottom-left { bottom: 10px; left: 10px; width: 90px; }
+        .decor2-bottom-left-2 { bottom: -10px; left: -30px; width: 500px; }
+        .decor2-bottom-left-3 { bottom: -60px; left: -6px; width: 550px; }
+        .decor2-bottom-left-4 { bottom: -10px; left: 100px; width: 300px; }
+        .decor2-corner { bottom: -10px; right: -10px; width: 130px; }
+        .decor2-side { top: 20%; left: -10px; width: 80px; }
+
+        .img-full {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-1deg);
+            width: 90%; height: 85%;
+            object-fit: cover;
+            border: 10px solid #fff;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            z-index: 100;
+        }
+        .img-full2 {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-1deg);
+            width: 90%; height: 85%;
+            object-fit: cover;
+            border: 10px solid #fff;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            z-index: 1;
+        }
+
+        .overlay-content {
+            position: relative;
+            z-index: 50;
+            background: rgba(232, 213, 181, 0.88); 
+            padding: 15px; border-radius: 10px; width: 80%;
+            backdrop-filter: blur(4px);
+            
+        }
+
+        .letter-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 20px; 
+            color: #1a0f0d;
+            line-height: 1.4;
+            font-weight: 700;
+            z-index: 20;
+        }
+
+        h2 { font-family: 'Playfair Display', serif; font-size: 24px; color: #3e2723; margin: 0 0 10px 0; }
+
+        .controls { position: fixed; bottom: 30px; display: flex; gap: 20px; z-index: 200; }
+        button {
+            padding: 12px 30px; border-radius: 25px; border: 2px solid #a1887f;
+            background: rgba(0,0,0,0.6); color: #e8d5b5; cursor: pointer; 
+            font-weight: bold; transition: 0.3s;
+        }
+        button:hover { background: #2d6a4f; color: white; }
+    </style>
+</head>
+<body>
+
+    <audio id="background-music" loop>
+        <source src="Mi persona Favorita.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="book" id="book">
+        
+        <div class="paper" id="p1" style="z-index: 8;">
+            <div class="front">
+                <img src="arbolsupiz.png" class="decor decor-top-left">
+                <img src="margagift.gif" class="decor decor-bottom-left-2">
+                <img src="pngwing.com.png" class="decor decor-top-right">
+                <img src="zorrode.png" class="decor decor-bottom-right">
+                <img src="zorros2.webp" class="img-full2">
+                <div class="overlay-content">
+                    <h2>Para mi hermosa Abigail ❤️</h2>
+                    <div class="letter-text" data-text="Esta es nuestra historia, te acuerdas de todo? yo si jeje te amo mucho"></div>
+                </div>
+            </div>
+            <div class="back">
+                <div class="letter-text" data-text="Cada momento que pasamos juntos siempre lo aprecio bastante, es el mejor regalo que puedo tener, tu hermosa sonrisa, tus bellos ojos, absolutamente todo de ti me encanta, y con esto te lo quiero demostrar, desmostrar cuanto realmente te amo y cuanto significas para mí, eres alguien increíble, fascinante, leal, amorosa, preciosa en todo sentido tanto por dentro como por fuera, eres sin duda, el amor de mi vida y Mi persona Favorita ❤️"></div>
+                <img src="arbolsupiz.png" class="decor decor-top-left">
+                <img src="margagift.gif" class="decor decor-bottom-left-2">
+                <img src="zorrode.png" class="decor decor-bottom-left">
+                <img src="lianaizq.png" class="decor decor-med-right">
+                <img src="arbolbajodere.png" class="decor decor-bottom-right-2">
+            </div>
+        </div>
+
+        <div class="paper" id="p2" style="z-index: 7;">
+            <div class="front">
+                <img src="flores.png" class="decor decor-side">
+                <img src="arbolsupiz.png" class="decor decor-top-left">
+                <img src="fondo11.png" class="decor decor-bottom-left-4">
+                <img src="arbolbajodere - copia.png" class="decor decor-bottom-left-3">
+                <h2>Para mi Abigail ❤️</h2>
+                <div class="letter-text" data-text="Ya han pasado 4 meses desde que oficializamos nuestro amor, cada dia que pasa te sigo eligiendo en mi vida de forma constante y conciente, eres sin duda lo mejor que me paso y prometo cuidarte hasta el fin de mis dias"></div>
+            </div>
+            <div class="back">
+                <img src="arbolsupiz.png" class="decor decor-top-left">
+                <img src="margagift.gif" class="decor decor-bottom-left-2">
+                <img src="gatitos-enamorados-besos-de-amor.gif" class="decor decor-bottom-left">
+                <img src="lianaizq.png" class="decor decor-med-right">
+                <img src="arbolbajodere.png" class="decor decor-bottom-right-2">
+                <div class="letter-text" data-text="Te acuerdas como fue nuestra primera interuacción? jugando mobile legends (te hize focues muejeje), con algo de nerviosismo decidi hablarte, me pareciste interesante, y te mande mi número para que interactuemos por whatsapp, queria agregarte en una parte de mi vida como lo era el grupo en ese entonces, desde ahi empezo nuestra escalada romantica, subiendo cada escalón lentamente pero de forma segura, desde ahí empezo lo que para mi es lo mejor que me paso en mi vida"></div>
+            </div>
+        </div>
+
+        <div class="paper" id="p3" style="z-index: 6;">
+            <div class="front">
+                <img src="pngwing.com.png" class="decor2 decor2-top-right">
+                <img src="zorrode.png" class="decor2 decor2-bottom-left">
+                <img src="imagen1.jpeg" class="img-full">
+                <img src="flores.png" class="decor decor-side">
+                <img src="arbolsupiz.png" class="decor decor-top-left">
+                <img src="fondo11.png" class="decor decor-bottom-left-4">
+                <img src="arbolbajodere - copia.png" class="decor decor-bottom-left-3">
+                <div class="overlay-content">
+                    <div class="letter-text" data-text="La primera vez que interactuamos jeje 😻"></div></div>
+            </div>
+            <div class="back">
+                <img src="arbolsupiz.png" class="decor decor-top-left">
+                <img src="margagift.gif" class="decor decor-bottom-left-2">
+                <img src="gatitos-enamorados-besos-de-amor.gif" class="decor decor-bottom-left">
+                <img src="lianaizq.png" class="decor decor-med-right">
+                <img src="arbolbajodere.png" class="decor decor-bottom-right-2">
+                <div class="letter-text" data-text="Pasando un tiempo juntos queria hacerme mas cercano a tí, pense en proponerte ser duos, en ese entonces ni tu ni yo buscabamos una relación romantica, teniamos las cosas dificiles pero aun asi nos volvimos mas y mas cercanos, decidimos compartir experiencia y compartir el juego juntos, solo siendo nosotros, divirtiendonos en el mismo lugar donde nos encontramos, en el mismo lugar donde empezamos, el mismo lugar que nos veria seguir creciendo juntos hasta el infinito"></div></div>
+        </div>
+
+        <div class="paper" id="p4" style="z-index: 5;">
+            <div class="front">
+                <img src="pngwing.com.png" class="decor2 decor2-top-right">
+                <img src="zorrode.png" class="decor2 decor2-bottom-left">
+                <img src="imagen4.jpeg" class="img-full">
+                <img src="flores.png" class="decor decor-side">
+                <img src="arbolsupiz.png" class="decor decor-top-left">
+                <img src="fondo11.png" class="decor decor-bottom-left-4">
+                <img src="arbolbajodere - copia.png" class="decor decor-bottom-left-3">
+                <div class="overlay-content"><div class="letter-text" data-text="Gracias por elegirme uwu"></div></div>
+            </div>
+            <div class="back">
+                <img src="arbolsupiz.png" class="decor decor-top-left">
+                <img src="margagift.gif" class="decor decor-bottom-left-2">
+                <img src="g3.gif" class="decor decor-bottom-left">
+                <img src="lianaizq.png" class="decor decor-med-right">
+                <img src="arbolbajodere.png" class="decor decor-bottom-right-2">
+                <div class="letter-text" data-text="Lo que yo sentia por ti fue escalando, empece a apreciarte más y mas, y tu me ibas correspondiendo los sentimientos, me encantaba lo que expresabamos, como nos ibamos acercando mas y mas de forma natural, como iba creciendo lo que sentiamos el uno por el otro, como ibamos mejorando y apoyandonos, como sabía que tu estarías para mi y yo para tí, eramos tu y yo, ya no solo tú, y ya no solo yo"></div></div>
+        </div>
+
+        <div class="paper" id="p5" style="z-index: 4;">
+            <div class="front">
+                <img src="mariposa.png" class="decor decor-top-right">
+                <img src="pngwing.com.png" class="decor2 decor2-top-right">
+                <img src="zorrode.png" class="decor2 decor2-bottom-left">
+                <img src="imagen3.jpeg" class="img-full">
+                <img src="flores.png" class="decor decor-side">
+                <img src="arbolsupiz.png" class="decor decor-top-left">
+                <img src="fondo11.png" class="decor decor-bottom-left-4">
+                <img src="arbolbajodere - copia.png" class="decor decor-bottom-left-3">
+                <div class="overlay-content"><div class="letter-text" data-text="Te quiero mucho mucho 🥰"></div></div>
+            </div>
+            <div class="back">
+                <img src="arbolsupiz.png" class="decor decor-top-left">
+                <img src="margagift.gif" class="decor decor-bottom-left-2">
+                <img src="g5.gif" class="decor decor-bottom-left">
+                <img src="lianaizq.png" class="decor decor-med-right">
+                <img src="arbolbajodere.png" class="decor decor-bottom-right-2">
+                <div class="letter-text" data-text="Habian pasado algunos meses desde que te conocí y antes de darme cuenta ya me habias empezado a gustar, me gustabas mas de lo que podía imaginar, tus mensajes me iluminaban la cara, las veces que hablabamos por llamada siempre era feliz, te habia conocido de la forma mas inesperada y me empezaste a gustar antes de que siquiera yo me de cuenta, con nerviosismo te iba expresando mis sentimientos hasta que un día tome la decisión de confesarte lo que sentia, simplemente no pude guardarlo mas tiempo, me gustabas, me gustas y me sigues gustando mucho, tenía miedo de tu respuesta, de arruinar nuestra amistad o que me rechazaras, aun así lo que sentia por ti era tan grande que te lo quise expresar, y cuando me dijiste que también te gustaba, fue, de las alegrías mas grandes que tuve, salte de alegríami corazón bail de a felicidad, fue de los momentos mas felices de mi vida"></div></div>
+            
+        </div>
+
+        <div class="paper" id="p6" style="z-index: 3;">
+            <div class="front">
+                <img src="imagen2.jpeg" class="img-full">
+                <img src="pngwing.com.png" class="decor2 decor2-top-right">
+                <img src="zorrode.png" class="decor2 decor2-bottom-left">
+                <img src="flores.png" class="decor decor-side">
+                <img src="arbolsupiz.png" class="decor decor-top-left">
+                <img src="fondo11.png" class="decor decor-bottom-left-4">
+                <img src="arbolbajodere - copia.png" class="decor decor-bottom-left-3">
+                <div class="overlay-content"><div class="letter-text" data-text="La primera confesión jeje"></div></div>
+            </div>
+            <div class="back">
+                <img src="arbolsupiz.png" class="decor decor-top-left">
+                <img src="margagift.gif" class="decor decor-bottom-left-2">
+                <img src="g5.gif" class="decor decor-bottom-left">
+                <img src="lianaizq.png" class="decor decor-med-right">
+                <img src="arbolbajodere.png" class="decor decor-bottom-right-2">
+                <div class="letter-text" data-text="Y cada dia que pasaba, me daba cuenta de lo mucho que te quería, lo mucho que te amaba, cada segundo, cada minuto, cada hora, cada dia, cada semana, cada mes que pasaba a tu lado me enamoraba más y más de ti, de todo de tí, tus locuras, tus chistes, aveces discutimos y peleamos pero siempre nos damos el tiempo de solucionarlo, siempre nos esforzamos por arreglar nuestra relación, lo que tu sientes por mi es reciproco a lo que yo siento por tí, cada momento a tu lado es genial, eres perfecta, perfecta realmente, almenos para mi lo eres, con tus defectos, con tus inseguridades, con tus hermosos sentimientos, con tus emociones, todo de ti me encanta, te amo, te amo demasiado y eso siempre será así."></div></div>
+        </div>
+
+        <div class="paper" id="p7" style="z-index: 2;">
+            <div class="front">
+                <img src="imagen6.jpeg" class="img-full">
+                <img src="pngwing.com.png" class="decor2 decor2-top-right">
+                <img src="zorrode.png" class="decor2 decor2-bottom-left">
+                <img src="flores.png" class="decor decor-side">
+                <img src="arbolsupiz.png" class="decor decor-top-left">
+                <img src="fondo11.png" class="decor decor-bottom-left-4">
+                <img src="arbolbajodere - copia.png" class="decor decor-bottom-left-3">
+                <div class="overlay-content"><div class="letter-text" data-text="Me encanta cuando nos ponemos melosos ❤️‍🔥"></div></div>
+            </div>
+            <div class="back">
+                <img src="arbolsupiz.png" class="decor decor-top-left">
+                <img src="margagift.gif" class="decor decor-bottom-left-2">
+                <img src="g6.gif" class="decor decor-bottom-left">
+                <img src="lianaizq.png" class="decor decor-med-right">
+                <img src="arbolbajodere.png" class="decor decor-bottom-right-2">
+                <div class="letter-text" data-text="Lo nuestro sigue avanzando y creciendo, cada dia que sigue pasando nos seguimos eligiendo mutuamente, llegaste cuando menos lo esperaba y ahora simplemente no puedo ver un futuro sin tí ahi, eres lo mejor que me paso en mi vida, volviste mis grises dias en radiantes colores del amanecer, lograste calmar las lluvias que atormentaban mi alma, ver que el mundo es realmente hermoso si tienes a esa persona por la cual morirías solo para verla feliz, eres especial en mi vida, eres parte de mi corazón, te volviste indispensable en mis dias y la reyna de mi mundo, eres todo lo que anhelo y sueño, quiero todo de tí y todo contigo."></div></div>
+        </div>
+
+        <div class="paper" id="p8" style="z-index: 1;">
+            <div class="front">
+                <img src="imagen5.jpeg" class="img-full">
+                <img src="pngwing.com.png" class="decor2 decor2-top-right">
+                <img src="zorrode.png" class="decor2 decor2-bottom-left">
+                <img src="flores.png" class="decor decor-side">
+                <img src="arbolsupiz.png" class="decor decor-top-left">
+                <img src="fondo11.png" class="decor decor-bottom-left-4">
+                <img src="arbolbajodere - copia.png" class="decor decor-bottom-left-3">
+                <div class="overlay-content">
+                    <div class="letter-text" data-text="Buscando nuestro futuro juntos 🥰"></div>
+                </div>
+            </div>
+            <div class="back">
+                <img src="arbolsupiz.png" class="decor decor-top-left">
+                <img src="margagift.gif" class="decor decor-bottom-left-2">
+                <img src="g6.gif" class="decor decor-bottom-left">
+                <img src="lianaizq.png" class="decor decor-med-right">
+                <img src="arbolbajodere.png" class="decor decor-bottom-right-2">
+                <h2>Siempre Juntos TÚ Y YO, Adri & Abi ❤️</h2>
+                <div class="letter-text" data-text="Este es el final del libro pero no el final de nuestro amor, es algo que queria hacer para que sientaslo mucho que yo siento por tí, y espero te haya gustado y lo guardes con todo el amor como el que yo puse al crearte esto. TE AMO MUCHO MUCHO 🤗"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button onclick="prev()">⇠ Volver</button>
+        <button onclick="next()">Continuar ⇢</button>
+    </div>
+
+    <script>
+        const music = document.getElementById('background-music');
+        let musicStarted = false;
+
+        function startMusic() {
+            if (!musicStarted) {
+                music.play().then(() => { music.volume = 0.4; musicStarted = true; })
+                .catch(e => console.log("Música lista"));
+            }
+        }
+
+        function typeWriter(element) {
+            if (!element) return;
+            const text = element.getAttribute('data-text');
+            element.innerHTML = "";
+            let i = 0;
+            const timer = setInterval(() => {
+                if(i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                } else { clearInterval(timer); }
+            }, 55);
+        }
+
+        let current = 1;
+        const totalPapers = 8;
+
+        function next() {
+            startMusic();
+            if(current <= totalPapers) {
+                const paper = document.getElementById(`p${current}`);
+                paper.classList.add("flipped");
+                paper.style.zIndex = current;
+                setTimeout(() => {
+                    const nextFront = document.querySelector(`#p${current + 1} .front .letter-text`);
+                    const currentBack = paper.querySelector('.back .letter-text');
+                    if(nextFront) typeWriter(nextFront);
+                    if(currentBack) typeWriter(currentBack);
+                }, 900);
+                current++;
+            }
+        }
+
+        function prev() {
+            if(current > 1) {
+                current--;
+                const paper = document.getElementById(`p${current}`);
+                paper.classList.remove("flipped");
+                paper.style.zIndex = totalPapers + 1 - current;
+                typeWriter(paper.querySelector('.front .letter-text'));
+            }
+        }
+
+        window.onload = () => typeWriter(document.querySelector('#p1 .front .letter-text'));
+    </script>
+</body>
+</html>
